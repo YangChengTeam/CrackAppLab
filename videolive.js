@@ -1,3 +1,18 @@
+//草聊app 破解
+
+/*
+ 破解:
+    抓包观察
+    查看app代码 未加固
+ 加密方式如下:
+   请求
+       header + gizp(rsa(json))
+     响应
+       gizp(自定义加密)
+ 漏洞: 
+   用户id服务器未校验
+   自定义用户id可查看所有付费视频
+*/
 const rp = require('request-promise');
 const pako = require('pako');
 const Base64 = require('js-base64').Base64;

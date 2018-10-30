@@ -1,3 +1,13 @@
+//互动作业 破解
+
+/*
+ 破解:
+    抓包观察
+    查看app代码 加固脱壳
+ 加密方式如下:
+      返回desc加密	
+*/
+
 var fs      = require('fs');
 var request = require("request");
 var co      = require('co');
