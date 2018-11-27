@@ -31,7 +31,7 @@ function decryption(data, key='IcYX83NIf5461vaP') {
 
 
 var auth = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6IlJPTEVfQURNSU4sQVVUSF9XUklURSIsInN1YiI6Ijg2NDM5NDAxMDE3NDg3MCIsImV4cCI6MTU0MjA3NTg1Nn0.jWkXlbaVQQ551r50cEwsVCGtK2wKdkAnoHELCQ4Xnx4pfAOwPFrP4sfmWhWuWOCtddOCUi4ZNvdyySJkf97pgQ';
-var types = ['free', 'fashi', 'zhanshi', 'cike', 'tanke', 'fuzhu'];
+var types = ['free', 'fashi', 'zhanshi', 'cike', 'tanke', 'fuzhu', 'sheshou'];
 
 var options = {
     uri: '',

@@ -18,6 +18,8 @@ const pako = require('pako');
 const Base64 = require('js-base64').Base64;
 const TextDecoder = require('util').TextDecoder
 const JSEncrypt = require('node-jsencrypt')
+const co = require('co');
+
 /* EncryptUtils by zhangkai */
 var EncryptUtils = {
     k: ['0', '1', '2', '3', '4', '5', '6', '7', '8',
@@ -68,7 +70,6 @@ var EncryptUtils = {
         return result;
     },
     sectionStr: function(str){
-
         var strs = [];
         var length = str.length;
         var size = 256;
@@ -115,29 +116,74 @@ var EncryptUtils = {
     }
 };
 
-var default_params = {
-	agent_id: 1,
-	ts: new Date().getTime(),
-	device_type: 2,
-	um_channel: "online",
-	userid: 57138787,
-	source: 57138787,
-	file_id: 20
-}
-var options = {
-    uri: 'https://a.197754.com/api/upload_file/browse_file',
-    method: 'POST',
-    encoding: null,
-    headers: {
-		cltokenexp: "1695887716",
-		cltoken: "k6yfmtqyoqdocsqwjh9fk63i7ahev42j"
-	},
-    body: EncryptUtils.compress(JSON.stringify(default_params), "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA5KaI8l7xplShIEB0PwgmMRX/3uGG9BDLPN6wbMmkkO7H1mIOXWB/Jdcl4/IMEuUDvUQyv3P+erJwZ1rvNstohXdhp2G7IqOzH6d3bj3Z6vBvsXP1ee1SgqUNrjX2dn02hMJ2Swt4ry3n3wEWusaWmev4CSteSKGHhBn5j2Z5B+CBOqPzKPp2Hh23jnIH8LSbXmW0q85a851BPwmgGEan5HBPq04QUjo6SQsW/7dLaaAXfUTYETe0HnpLaimcHl741ftGyrQvpkmqF93WiZZXwlcDHSprf8yW0L0KA5jIwq7qBeu/H/H5vm6yVD5zvUIsD7htX0tIcXeMVAmMXFLX35duvYDpTYgO+DsMgk2Q666j6OcEDVWNBDqGHc+uPvYzVF6wb3w3qbsqTnD0qb/pWxpEdgK2BMVz+IPwdP6hDsDRc67LVftYqHJLKAfQt5T6uRImDizGzhhfIfJwGQxI7TeJq0xWIwB+KDUbFPfTcq0RkaJ2C5cKIx08c7lYhrsPXbW+J/W4M5ZErbwcdj12hrfV8TPx/RgpJcq82otrNthI3f4QdG4POUhdgSx4TvoGMTk6CnrJwALqkGl8OTfPKojOucENSxcA4ERtBw4It8/X39Mk0aqa8/YBDSDDjb+gCu/Em4yYvrattNebBC1zulK9uJIXxVPi5tNd7KlwLRMCAwEAAQ==")
-};
 
-rp(options)
+
+function setBody(default_params){
+    let body = EncryptUtils.compress(JSON.stringify(default_params), "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA5KaI8l7xplShIEB0PwgmMRX/3uGG9BDLPN6wbMmkkO7H1mIOXWB/Jdcl4/IMEuUDvUQyv3P+erJwZ1rvNstohXdhp2G7IqOzH6d3bj3Z6vBvsXP1ee1SgqUNrjX2dn02hMJ2Swt4ry3n3wEWusaWmev4CSteSKGHhBn5j2Z5B+CBOqPzKPp2Hh23jnIH8LSbXmW0q85a851BPwmgGEan5HBPq04QUjo6SQsW/7dLaaAXfUTYETe0HnpLaimcHl741ftGyrQvpkmqF93WiZZXwlcDHSprf8yW0L0KA5jIwq7qBeu/H/H5vm6yVD5zvUIsD7htX0tIcXeMVAmMXFLX35duvYDpTYgO+DsMgk2Q666j6OcEDVWNBDqGHc+uPvYzVF6wb3w3qbsqTnD0qb/pWxpEdgK2BMVz+IPwdP6hDsDRc67LVftYqHJLKAfQt5T6uRImDizGzhhfIfJwGQxI7TeJq0xWIwB+KDUbFPfTcq0RkaJ2C5cKIx08c7lYhrsPXbW+J/W4M5ZErbwcdj12hrfV8TPx/RgpJcq82otrNthI3f4QdG4POUhdgSx4TvoGMTk6CnrJwALqkGl8OTfPKojOucENSxcA4ERtBw4It8/X39Mk0aqa8/YBDSDDjb+gCu/Em4yYvrattNebBC1zulK9uJIXxVPi5tNd7KlwLRMCAwEAAQ==")
+    return body;
+}
+
+function browse_file(){
+    var default_params = {
+        agent_id: 1,
+        ts: new Date().getTime(),
+        device_type: 2,
+        um_channel: "online",
+        userid: 57138787,
+        source: 57138787,
+        file_id: 20
+    }
+
+    var options = {
+      uri: 'https://a.197754.com/api/upload_file/browse_file',
+      method: 'POST',
+      encoding: null,
+      headers: {
+        cltokenexp: "1695887716",
+        cltoken: "k6yfmtqyoqdocsqwjh9fk63i7ahev42j",
+      },
+      body: setBody(default_params)
+  };
+
+  rp(options)
     .then(function ($) {
-    	console.log(EncryptUtils.decodeResponse($))
+      console.log(EncryptUtils.decodeResponse($))
     })
-    .catch(function (err) {	
+    .catch(function (err) { 
     });
+}
+
+
+function send_msg(userid){
+     var default_params = {
+          agent_id: 1,
+          ts: new Date().getTime(),
+          device_type: 2,
+          um_channel: "online",
+          userid: userid,
+          receive_userid: 10873620,
+          content: "爱你一万年",
+          annex_type: 0,
+          type: 0
+     }
+     var options = {
+        uri: 'https://a.197754.com/api/user/send_chat',
+        method: 'POST',
+        encoding: null,
+        headers: {
+          cltokenexp: "1695887716",
+          cltoken: "k6yfmtqyoqdocsqwjh9fk63i7ahev42j",
+        },
+        body: setBody(default_params)
+    };
+    return rp(options);
+}
+
+var userid = 22757338;
+co(function*(){
+    var data = yield send_msg(userid);
+    data = JSON.parse(EncryptUtils.decodeResponse(data));
+    console.log(data);
+});
+
+
